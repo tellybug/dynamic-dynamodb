@@ -138,7 +138,7 @@ def execute():
             gsi_names = set()
             # Add regexp table names
             for gst_instance in dynamodb.table_gsis(table_name):
-                gsi_name = gst_instance[u'IndexName']
+                gsi_name = gst_instance['IndexName']
 
                 try:
                     gsi_keys = get_table_option(table_key, 'gsis').keys()
