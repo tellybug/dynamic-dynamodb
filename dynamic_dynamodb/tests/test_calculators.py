@@ -2,8 +2,7 @@
 """ Testing the Dynamic DynamoDB calculators """
 import unittest
 
-import calculators
-
+from dynamic_dynamodb import calculators
 
 class TestCalculators(unittest.TestCase):
     """ Test the Dynamic DynamoDB calculators """
@@ -154,4 +153,4 @@ class TestCalculators(unittest.TestCase):
         self.assertEqual(result, 25)
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    unittest.main(verbosity=3)

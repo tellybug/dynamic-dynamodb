@@ -34,6 +34,3 @@ def __get_connection_cloudwatch():
 
     logger.debug('Connected to CloudWatch in {0}'.format(region))
     return connection
-
-
-CLOUDWATCH_CONNECTION = __get_connection_cloudwatch()
