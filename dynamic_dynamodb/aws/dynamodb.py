@@ -216,7 +216,7 @@ def list_tables():
             for table_name in table_list['TableNames']:
                 tables.append(get_table(table_name))
 
-            if u'LastEvaluatedTableName' in table_list:
+            if 'LastEvaluatedTableName' in table_list:
                 table_list = __get_connection_dynamodb().list_tables(
                     table_list['LastEvaluatedTableName'])
             else:
@@ -561,7 +561,7 @@ def table_gsis(table_name):
     except JSONResponseError:
         raise
 
-    if u'GlobalSecondaryIndexes' in desc:
+    if 'GlobalSecondaryIndexes' in desc:
         return desc['GlobalSecondaryIndexes']
 
     return []
