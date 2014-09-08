@@ -1,10 +1,76 @@
 Release notes
 =============
 
+1.18.3
+------
+
+**Release date:** 2014-08-04
+
+- Throttling up scaling was ignored if a regular down scale occurred (`#198 <https://github.com/sebdah/dynamic-dynamodb/issues/198>`__)
+- Read config setting used in wrong situation for GSIs (`#199 <https://github.com/sebdah/dynamic-dynamodb/issues/199>`__)
+
+1.18.2
+------
+
+**Release date:** 2014-07-23
+
+- Throughput alarms does not honor lookback windows (`#197 <https://github.com/sebdah/dynamic-dynamodb/issues/197>`__)
+
+1.18.1
+------
+
+**Release date:** 2014-07-18
+
+- Incorrect division in consumption calculation (`#195 <https://github.com/sebdah/dynamic-dynamodb/issues/195>`__)
+
+1.18.0
+------
+
+**Release date:** 2014-07-17
+
+- Make the CloudWatch lookback window start point configurable (`#192 <https://github.com/sebdah/dynamic-dynamodb/issues/192>`__)
+- Make it possible to turn on and off up-scaling or down-scaling (`#147 <https://github.com/sebdah/dynamic-dynamodb/issues/147>`__)
+- Enhance boto logging for GSI errors (`#194 <https://github.com/sebdah/dynamic-dynamodb/issues/194>`__)
+- Automatically bump the doc version (`#191 <https://github.com/sebdah/dynamic-dynamodb/issues/191>`__)
+
+1.17.0
+------
+
+**Release date:** 2014-06-23
+
+- No credentials needed in the CloudFormation template, an IAM Instance Profile will be automatically created
+- The CloudFormation template will now launch Amazon Linux 2014.03.1 AMIs
+- Minor fixes to make the CloudFormation template work smoother
+- Fallback to use boto authentication (`#188 <https://github.com/sebdah/dynamic-dynamodb/issues/188>`__)
+- Handle logging configuration exceptions (`#189 <https://github.com/sebdah/dynamic-dynamodb/issues/189>`__)
+
+1.16.0
+------
+
+**Release date:** 2014-06-11
+
+- SNS notifications when throughput thresholds are exeeded. (`#174 <https://github.com/sebdah/dynamic-dynamodb/issues/174>`__). Thanks (`@Jofen <https://github.com/Jofen>`__) for the pull request!
+
+1.15.1
+------
+
+**Release date:** 2014-06-05
+
+- Locked ``boto`` version to 2.28.0 (`#183 <https://github.com/sebdah/dynamic-dynamodb/issues/183>`__)
+
+1.15.0
+------
+
+**Release date:** 2014-06-02
+
+- Default options for tables and GSIs is now supported using the `[default_options]` section (`#181 <https://github.com/sebdah/dynamic-dynamodb/issues/181>`__)
+
 1.14.0
 ------
 
 **Release date:** 2014-05-21
+
+A special thanks to (`@ulsa <https://github.com/ulsa>`__) for his help with this release.
 
 - Document SNS permission requirements (`#171 <https://github.com/sebdah/dynamic-dynamodb/issues/171>`__)
 - Wrong region in log message for instance profile authentication (`#170 <https://github.com/sebdah/dynamic-dynamodb/issues/170>`__)

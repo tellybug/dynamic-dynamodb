@@ -4,6 +4,7 @@ Dynamic DynamoDB
 <a href="https://crate.io/packages/dynamic-dynamodb/"><img src="https://pypip.in/v/dynamic-dynamodb/badge.png"></a>
 <a href="https://crate.io/packages/dynamic-dynamodb/"><img src="https://pypip.in/d/dynamic-dynamodb/badge.png"></a>
 <a href="https://crate.io/packages/dynamic-dynamodb/"><img src="https://pypip.in/license/dynamic-dynamodb/badge.png"></a>
+<a href="http://dynamic-dynamodb.readthedocs.org/en/latest/"><img src="https://readthedocs.org/projects/dynamic-dynamodb/badge/?version=latest"></a>
 
 AWS NoSQL database DynamoDB is a great service, but it lacks automated throughput scaling. This is where Dynamic DynamoDB enters the stage. It provides automatic read and write provisioning for DynamoDB.
 
@@ -76,6 +77,44 @@ If you want to set up a separate IAM user for Dynamic DynamoDB, then you need to
 * `dynamodb:ListTables`
 * `dynamodb:UpdateTable`
 * `sns:Publish` (used by the SNS notifications feature)
+
+An example policy could look like this:
+
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:DescribeTable",
+            "dynamodb:ListTables",
+            "dynamodb:UpdateTable",
+            "cloudwatch:GetMetricStatistics"
+          ],
+          "Resource": [
+            "*"
+          ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "sns:Publish"
+          ],
+          "Resource": [
+            "arn:aws:sns:*::dynamic-dynamodb"
+          ]
+        }
+      ]
+    }
+
+Community applications
+----------------------
+
+There are a few community applications for managing Dynamic DynamoDB.
+
+- [chef-dynamic-dynamodb](https://github.com/spaceapegames/chef-dynamic-dynamodb) (Chef cookbook)
+- [puppet-dynamicdynamodb](https://github.com/mindcandy/puppet-dynamicdynamodb) (Puppet module)
+- [elasticDynamoDB](https://github.com/innovia/ElasticDynamoDb) (Wrapper for handling larger planned spikes)
 
 Reporting bugs
 --------------

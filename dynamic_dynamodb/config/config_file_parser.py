@@ -19,6 +19,18 @@ TABLE_CONFIG_OPTIONS = [
         'type': 'bool'
     },
     {
+        'key': 'disable_reads_up_scaling',
+        'option': 'disable-reads-up-scaling',
+        'required': False,
+        'type': 'bool'
+    },
+    {
+        'key': 'disable_reads_down_scaling',
+        'option': 'disable-reads-down-scaling',
+        'required': False,
+        'type': 'bool'
+    },
+    {
         'key': 'reads_lower_threshold',
         'option': 'reads-lower-threshold',
         'required': False,
@@ -185,6 +197,36 @@ TABLE_CONFIG_OPTIONS = [
         'option': 'num-read-checks-reset-percent',
         'required': False,
         'type': 'int'
+    },
+    {
+        'key': 'reads-upper-alarm-threshold',
+        'option': 'reads-upper-alarm-threshold',
+        'required': False,
+        'type': 'int'
+    },
+    {
+        'key': 'reads-lower-alarm-threshold',
+        'option': 'reads-lower-alarm-threshold',
+        'required': False,
+        'type': 'int'
+    },
+    {
+        'key': 'writes-upper-alarm-threshold',
+        'option': 'writes-upper-alarm-threshold',
+        'required': False,
+        'type': 'int'
+    },
+    {
+        'key': 'writes-lower-alarm-threshold',
+        'option': 'writes-lower-alarm-threshold',
+        'required': False,
+        'type': 'int'
+    },
+    {
+        'key': 'lookback_window_start',
+        'option': 'lookback-window-start',
+        'required': False,
+        'type': 'int'
     }
 ]
 
@@ -336,18 +378,19 @@ def parse(config_path):
                 }
             ])
 
-    if 'tabledefaults' in config_file.sections():
+    if 'default_options' in config_file.sections():
         # nothing is required in defaults, so we set required to False
         default_config_options = deepcopy(TABLE_CONFIG_OPTIONS)
         for item in default_config_options:
             item['required'] = False
-        tabledefaults = __parse_options(config_file, 'tabledefaults', default_config_options)
+        default_options = __parse_options(
+            config_file, 'default_options', default_config_options)
         # if we've got a default set required to be false for table parsing
         for item in TABLE_CONFIG_OPTIONS:
-            if item['key'] in tabledefaults:
+            if item['key'] in default_options:
                 item['required'] = False
     else:
-        tabledefaults = {}
+        default_options = {}
 
     #
     # Handle [table: ]
@@ -362,17 +405,17 @@ def parse(config_path):
 
         found_table = True
         current_table_name = current_section.rsplit(':', 1)[1].strip()
-        table_config['tables'][current_table_name] = dict(tabledefaults.items() + __parse_options(
-            config_file,
-            current_section, TABLE_CONFIG_OPTIONS).items())
+        table_config['tables'][current_table_name] = \
+            dict(default_options.items() + __parse_options(
+                config_file, current_section, TABLE_CONFIG_OPTIONS).items())
 
     if not found_table:
         print('Could not find a [table: <table_name>] section in {0}'.format(
             config_path))
         sys.exit(1)
 
-    # Find gsi definitions - this allows gsi's to be defined before the table definitions
-    # we don't worry about parsing everything twice here
+    # Find gsi definitions - this allows gsi's to be defined before the table
+    # definitions we don't worry about parsing everything twice here
     for current_section in config_file.sections():
         try:
             header1, gsi_key, header2, table_key = current_section.split(' ')
@@ -391,9 +434,8 @@ def parse(config_path):
             table_config['tables'][table_key]['gsis'] = {}
 
         table_config['tables'][table_key]['gsis'][gsi_key] = \
-            __parse_options(
-                config_file,
-                current_section, TABLE_CONFIG_OPTIONS)
+            dict(default_options.items() + __parse_options(
+                config_file, current_section, TABLE_CONFIG_OPTIONS).items())
 
     return dict(
         global_config.items() +
