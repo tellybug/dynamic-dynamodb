@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """ Configuration handler """
-import config
+from dynamic_dynamodb import config
 
 CONFIGURATION = config.get_configuration()
 

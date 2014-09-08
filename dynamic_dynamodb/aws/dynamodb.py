@@ -91,9 +91,9 @@ def get_gsi_status(table_name, gsi_name):
     except JSONResponseError:
         raise
 
-    for gsi in desc[u'Table'][u'GlobalSecondaryIndexes']:
-        if gsi[u'IndexName'] == gsi_name:
-            return gsi[u'IndexStatus']
+    for gsi in desc['Table']['GlobalSecondaryIndexes']:
+        if gsi['IndexName'] == gsi_name:
+            return gsi['IndexStatus']
 
 
 def get_provisioned_gsi_read_units(table_name, gsi_name):
@@ -110,10 +110,10 @@ def get_provisioned_gsi_read_units(table_name, gsi_name):
     except JSONResponseError:
         raise
 
-    for gsi in desc[u'Table'][u'GlobalSecondaryIndexes']:
-        if gsi[u'IndexName'] == gsi_name:
+    for gsi in desc['Table']['GlobalSecondaryIndexes']:
+        if gsi['IndexName'] == gsi_name:
             read_units = int(
-                gsi[u'ProvisionedThroughput'][u'ReadCapacityUnits'])
+                gsi['ProvisionedThroughput']['ReadCapacityUnits'])
             break
 
     logger.debug(
@@ -136,10 +136,10 @@ def get_provisioned_gsi_write_units(table_name, gsi_name):
     except JSONResponseError:
         raise
 
-    for gsi in desc[u'Table'][u'GlobalSecondaryIndexes']:
-        if gsi[u'IndexName'] == gsi_name:
+    for gsi in desc['Table']['GlobalSecondaryIndexes']:
+        if gsi['IndexName'] == gsi_name:
             write_units = int(
-                gsi[u'ProvisionedThroughput'][u'WriteCapacityUnits'])
+                gsi['ProvisionedThroughput']['WriteCapacityUnits'])
             break
 
     logger.debug(
@@ -161,7 +161,7 @@ def get_provisioned_table_read_units(table_name):
         raise
 
     read_units = int(
-        desc[u'Table'][u'ProvisionedThroughput'][u'ReadCapacityUnits'])
+        desc['Table']['ProvisionedThroughput']['ReadCapacityUnits'])
 
     logger.debug('{0} - Currently provisioned read units: {1:d}'.format(
         table_name, read_units))
@@ -181,7 +181,7 @@ def get_provisioned_table_write_units(table_name):
         raise
 
     write_units = int(
-        desc[u'Table'][u'ProvisionedThroughput'][u'WriteCapacityUnits'])
+        desc['Table']['ProvisionedThroughput']['WriteCapacityUnits'])
 
     logger.debug('{0} - Currently provisioned write units: {1:d}'.format(
         table_name, write_units))
@@ -200,7 +200,7 @@ def get_table_status(table_name):
     except JSONResponseError:
         raise
 
-    return desc[u'Table'][u'TableStatus']
+    return desc['Table']['TableStatus']
 
 
 def list_tables():
@@ -213,12 +213,12 @@ def list_tables():
     try:
         table_list = __get_connection_dynamodb().list_tables()
         while True:
-            for table_name in table_list[u'TableNames']:
+            for table_name in table_list['TableNames']:
                 tables.append(get_table(table_name))
 
             if u'LastEvaluatedTableName' in table_list:
                 table_list = __get_connection_dynamodb().list_tables(
-                    table_list[u'LastEvaluatedTableName'])
+                    table_list['LastEvaluatedTableName'])
             else:
                 break
 
@@ -557,12 +557,12 @@ def table_gsis(table_name):
     :returns: list -- List of GSI names
     """
     try:
-        desc = __get_connection_dynamodb().describe_table(table_name)[u'Table']
+        desc = __get_connection_dynamodb().describe_table(table_name)['Table']
     except JSONResponseError:
         raise
 
     if u'GlobalSecondaryIndexes' in desc:
-        return desc[u'GlobalSecondaryIndexes']
+        return desc['GlobalSecondaryIndexes']
 
     return []
 
