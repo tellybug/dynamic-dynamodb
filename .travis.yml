@@ -6,7 +6,9 @@ python:
 #  - "3.3"
 # command to install dependencies
 env:
-  - NOSE_WITH_COVERAGE=1 NOSE_COVER_PACKAGE=dynamic_dynamodb
+  global:
+    - NOSE_WITH_COVERAGE=1
+    - NOSE_COVER_PACKAGE=dynamic_dynamodb
 install: 
   - "pip install -r requirements.txt"
   - "pip install -r test-requirements.txt"
