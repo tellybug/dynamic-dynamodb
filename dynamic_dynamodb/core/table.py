@@ -69,9 +69,11 @@ def ensure_provisioning(
                 key_name,
                 updated_read_units,
                 updated_write_units)
-            api.Event.create(title="DynDynamo scaling",
-                             text="Dynamic DynamoDB triggering scaling on {}".format(table_name),
-                             tags=["table:"+table_name])
+            resp = api.Event.create(title="Dynamic Dynamo scaling",
+                                    text="Dynamic DynamoDB triggering scaling on {}".format(table_name),
+                                    tags=["table:"+table_name])
+            if resp['status'] != 'ok':
+                logger.warn('Unable to send Datadog event - response: '+str(resp))
         else:
             logger.info('{0} - No need to change provisioning'.format(
                 table_name))
