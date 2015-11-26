@@ -307,6 +307,7 @@ def parse(config_path):
     #
     # Handle [global]
     #
+    global_config = {}
     if 'global' in config_file.sections():
         global_config = __parse_options(
             config_file,
@@ -353,6 +354,7 @@ def parse(config_path):
     #
     # Handle [logging]
     #
+    logging_config = {}
     if 'logging' in config_file.sections():
         logging_config = __parse_options(
             config_file,
@@ -377,6 +379,30 @@ def parse(config_path):
                     'type': 'str'
                 }
             ])
+    #
+    # Handle monitoring
+    #
+    monitoring_config = {}
+    if 'monitoring' in config_file.sections():
+        monitoring_config = __parse_options(
+            config_file,
+            'monitoring',
+            [
+                {
+                    'key': 'datadog_api_key',
+                    'option': 'datadog-api-key',
+                    'required': False,
+                    'type': 'str'
+                },
+                {
+                    'key': 'datadog_application_key',
+                    'option': 'datadog-application-key',
+                    'required': False,
+                    'type': 'str'
+
+                }
+            ]
+        )
 
     if 'default_options' in config_file.sections():
         # nothing is required in defaults, so we set required to False
@@ -440,4 +466,6 @@ def parse(config_path):
     return dict(
         global_config.items() +
         logging_config.items() +
-        table_config.items())
+        table_config.items() +
+        monitoring_config.items()
+    )

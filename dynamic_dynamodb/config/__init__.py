@@ -28,6 +28,10 @@ DEFAULT_OPTIONS = {
         'log_level': 'info',
         'log_config_file': None
     },
+    'monitoring': {
+        'datadog_api_key': None,
+        'datadog_application_key': None,
+    },
     'table': {
         'reads-upper-alarm-threshold': 0,
         'reads-lower-alarm-threshold': 0,
@@ -119,7 +123,8 @@ def get_configuration():
     configuration = {
         'global': {},
         'logging': {},
-        'tables': {}
+        'tables': {},
+        'monitoring': {}
     }
 
     # Read the command line options
@@ -140,6 +145,12 @@ def get_configuration():
     configuration['logging'] = __get_logging_options(
         cmd_line_options,
         conf_file_options)
+
+    # Extract monitoring config
+    configuration['monitoring'] = __get_monitoring_options(
+        cmd_line_options,
+        conf_file_options
+    )
 
     # Extract table configuration
     # If the --table cmd line option is set, it indicates that only table
@@ -295,6 +306,26 @@ def __get_logging_options(cmd_line_options, conf_file_options=None):
 
     return options
 
+
+def __get_monitoring_options(cmd_line_options, conf_file_options=None):
+    """
+    Get the monitoring (DataDog) options
+    :param cmd_line_options:
+    :param conf_file_options:
+    :return:
+    """
+    options = {}
+
+    for option in DEFAULT_OPTIONS['monitoring'].keys():
+        options[option] = DEFAULT_OPTIONS['monitoring'][option]
+
+        if conf_file_options and option in conf_file_options:
+            options[option] = conf_file_options[option]
+
+        if cmd_line_options and option in cmd_line_options:
+            options[option] = cmd_line_options[option]
+
+    return options
 
 def __check_gsi_rules(configuration):
     """ Do some basic checks on the configuration """

@@ -7,8 +7,11 @@ from dynamic_dynamodb.aws import dynamodb, sns
 from dynamic_dynamodb.core import circuit_breaker
 from dynamic_dynamodb.statistics import table as table_stats
 from dynamic_dynamodb.log_handler import LOGGER as logger
-from dynamic_dynamodb.config_handler import get_table_option, get_global_option
+from dynamic_dynamodb.config_handler import get_table_option, get_global_option, get_monitoring_option
+from datadog import api, initialize
 
+initialize(api_key=get_monitoring_option('datadog_api_key'),
+           app_key=get_monitoring_option('datadog_application_key'))
 
 def ensure_provisioning(
         table_name, key_name,
@@ -66,6 +69,9 @@ def ensure_provisioning(
                 key_name,
                 updated_read_units,
                 updated_write_units)
+            api.Event.create(title="DynDynamo scaling",
+                             text="Dynamic DynamoDB triggering scaling on {}".format(table_name),
+                             tags=["table:"+table_name])
         else:
             logger.info('{0} - No need to change provisioning'.format(
                 table_name))

@@ -53,6 +53,17 @@ def get_logging_option(option):
         return None
 
 
+def get_monitoring_option(option):
+    """ Returns the value of the option
+
+    :returns: str or None
+    """
+    try:
+        return CONFIGURATION['monitoring'][option]
+    except KeyError:
+        return None
+
+
 def get_table_option(table_name, option):
     """ Returns the value of the option
 
